@@ -1,108 +1,140 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Luna-HTTP/S is a maintained custom NGINX build with OpenSSL LTS, ML-KEM support, HTTP/3, Brotli, GeoIP2, and reproducible Docker images.">
-    <title>Luna-HTTP/S - lunahttps.tiekoetter.net</title>
-    <link rel="icon" href="assets/favicon.ico" sizes="any">
-    <link rel="stylesheet" href="assets/styles.css">
-  </head>
-  <body>
-    <main>
-      <header class="intro">
-        <p class="kicker">Custom NGINX build</p>
-        <h1>Luna-HTTP/S</h1>
-        <p class="summary">
-          A maintained, source-built NGINX mainline distribution with OpenSSL LTS,
-          post-quantum ML-KEM support, HTTP/3 / QUIC, Brotli, GeoIP2, header
-          manipulation support, and reproducible Docker builds.
-        </p>
-        <nav aria-label="Project links">
-          <a href="https://github.com/tiekoetter/lunahttps">GitHub</a>
-          <a href="https://github.com/tiekoetter/lunahttps/pkgs/container/lunahttps">Container</a>
-          <a href="#usage">Usage</a>
-          <a href="#build">Build</a>
-        </nav>
-      </header>
 
-      <section aria-labelledby="overview-heading">
-        <h2 id="overview-heading">Overview</h2>
-        <div class="facts">
-          <div>
-            <dt>Base</dt>
-            <dd>NGINX mainline</dd>
-          </div>
-          <div>
-            <dt>TLS stack</dt>
-            <dd>OpenSSL 3.5 LTS</dd>
-          </div>
-          <div>
-            <dt>Protocols</dt>
-            <dd>HTTP/1.1, HTTP/2, HTTP/3</dd>
-          </div>
-          <div>
-            <dt>Image</dt>
-            <dd><code>ghcr.io/tiekoetter/lunahttps</code></dd>
-          </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Luna-HTTP/S is a maintained custom NGINX build with OpenSSL LTS, ML-KEM support, HTTP/3, Brotli, GeoIP2, and reproducible Docker images.">
+  <title>Luna-HTTP/S - lunahttps.tiekoetter.net</title>
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body>
+  <main>
+    <header class="intro">
+      <p class="kicker">Custom NGINX build</p>
+      <h1>Luna-HTTP/S</h1>
+      <p class="summary">
+        A maintained, source-built NGINX mainline distribution with OpenSSL LTS,
+        post-quantum ML-KEM support, HTTP/3 / QUIC, Brotli, GeoIP2, header
+        manipulation support, and reproducible Docker builds.
+      </p>
+      <nav aria-label="Project links">
+        <a href="https://github.com/tiekoetter/lunahttps">GitHub</a>
+        <a href="https://github.com/tiekoetter/lunahttps/pkgs/container/lunahttps">Container</a>
+        <a href="#usage">Usage</a>
+        <a href="#build">Build</a>
+      </nav>
+    </header>
+
+    <section aria-labelledby="overview-heading">
+      <h2 id="overview-heading">Overview</h2>
+      <div class="facts">
+        <div>
+          <dt>Base</dt>
+          <dd>NGINX mainline</dd>
         </div>
-        <p class="note">
-          The build identifies itself as <code>luna-http/s</code> in generated
-          server headers and error pages.
-        </p>
-      </section>
+        <div>
+          <dt>TLS stack</dt>
+          <dd>OpenSSL 3.5 LTS</dd>
+        </div>
+        <div>
+          <dt>Protocols</dt>
+          <dd>HTTP/1.1, HTTP/2, HTTP/3</dd>
+        </div>
+        <div>
+          <dt>Image</dt>
+          <dd><code>ghcr.io/tiekoetter/lunahttps</code></dd>
+        </div>
+      </div>
+      <p class="note">
+        The build identifies itself as <code>luna-http/s</code> in generated
+        server headers and error pages.
+      </p>
+      <h3>Connection details</h3>
+      <pre><code id="connection-details">Loading connection details…</code></pre>
+    </section>
 
-      <section aria-labelledby="features-heading">
-        <h2 id="features-heading">Included Features</h2>
-        <ul class="feature-list">
-          <li><strong>NGINX mainline</strong> as the base for current protocol and module support.</li>
-          <li><strong>OpenSSL LTS</strong> pinned by version and SHA256, including ML-KEM-capable post-quantum TLS support.</li>
-          <li><strong>HTTP/3 / QUIC</strong> alongside HTTP/1.1 and HTTP/2.</li>
-          <li><strong>Brotli compression</strong> through <code>ngx_brotli</code>.</li>
-          <li><strong>GeoIP2 support</strong> through <code>ngx_http_geoip2_module</code>.</li>
-          <li><strong>Header manipulation</strong> through <code>headers-more-nginx-module</code>.</li>
-        </ul>
-      </section>
+    <section aria-labelledby="features-heading">
+      <h2 id="features-heading">Included Features</h2>
+      <ul class="feature-list">
+        <li><strong>NGINX mainline</strong> as the base for current protocol and module support.</li>
+        <li><strong>OpenSSL LTS</strong> pinned by version and SHA256, including ML-KEM-capable post-quantum TLS
+          support.</li>
+        <li><strong>HTTP/3 / QUIC</strong> alongside HTTP/1.1 and HTTP/2.</li>
+        <li><strong>Brotli compression</strong> through <code>ngx_brotli</code>.</li>
+        <li><strong>GeoIP2 support</strong> through <code>ngx_http_geoip2_module</code>.</li>
+        <li><strong>Header manipulation</strong> through <code>headers-more-nginx-module</code>.</li>
+      </ul>
+    </section>
 
-      <section id="usage" aria-labelledby="usage-heading">
-        <h2 id="usage-heading">Container Usage</h2>
-        <p>
-          The image is published through GitHub Container Registry after CI
-          succeeds on the main branch.
-        </p>
-        <pre><code>docker pull ghcr.io/tiekoetter/lunahttps:latest
+    <section id="usage" aria-labelledby="usage-heading">
+      <h2 id="usage-heading">Container Usage</h2>
+      <p>
+        The image is published through GitHub Container Registry after CI
+        succeeds on the main branch.
+      </p>
+      <pre><code>docker pull ghcr.io/tiekoetter/lunahttps:latest
 
 docker run --rm \
   -p 80:80/tcp \
   -p 443:443/tcp \
   -p 443:443/udp \
   ghcr.io/tiekoetter/lunahttps:latest</code></pre>
-      </section>
+    </section>
 
-      <section id="build" aria-labelledby="build-heading">
-        <h2 id="build-heading">Source Build</h2>
-        <p>
-          The public repository keeps the build process inspectable, repeatable,
-          and CI-tested.
-        </p>
-        <pre><code>git clone --recurse-submodules https://github.com/tiekoetter/lunahttps.git
+    <section id="build" aria-labelledby="build-heading">
+      <h2 id="build-heading">Source Build</h2>
+      <p>
+        The public repository keeps the build process inspectable, repeatable,
+        and CI-tested.
+      </p>
+      <pre><code>git clone --recurse-submodules https://github.com/tiekoetter/lunahttps.git
 cd lunahttps
 sudo ./build.sh</code></pre>
-      </section>
+    </section>
 
-      <section aria-labelledby="background-heading">
-        <h2 id="background-heading">Background</h2>
-        <p>
-          Luna-HTTP/S started in 2018 as a personal source-built NGINX setup.
-          The goal was simple: build NGINX directly from source with the protocol,
-          TLS, and module support needed for my own deployments. This public
-          version keeps that long-running build reproducible and visible.
-        </p>
-      </section>
+    <section aria-labelledby="background-heading">
+      <h2 id="background-heading">Background</h2>
+      <p>
+        Luna-HTTP/S started in 2018 as a personal source-built NGINX setup.
+        The goal was simple: build NGINX directly from source with the protocol,
+        TLS, and module support needed for my own deployments. This public
+        version keeps that long-running build reproducible and visible.
+      </p>
+    </section>
 
-      <footer>
-        <p>Copyright © 2018-2026 Léon Tiekötter. Released under the BSD 2-Clause License.</p>
-      </footer>
-    </main>
-  </body>
+    <footer>
+      <p>Copyright © 2018-2026 Léon Tiekötter. Released under the BSD 2-Clause License.</p>
+    </footer>
+  </main>
+  <script>
+    (async () => {
+      const el = document.getElementById("connection-details");
+
+      try {
+        const res = await fetch("/connection-details.json", {
+          cache: "no-store"
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const info = await res.json();
+
+        el.textContent =
+          `Protocol: ${info.protocol || "unknown"}
+TLS:      ${info.tls || "unknown"}
+Cipher:   ${info.cipher || "unknown"}
+Curve:    ${info.curve || "unknown"}`;
+      } catch (err) {
+        el.textContent = "Connection details unavailable.";
+      }
+    })();
+  </script>
+</body>
+
 </html>
