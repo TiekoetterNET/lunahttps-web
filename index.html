@@ -123,13 +123,15 @@ sudo ./build.sh</code></pre>
           throw new Error(`HTTP ${res.status}`);
         }
 
+        const compression = res.headers.get("content-encoding") || "none";
         const info = await res.json();
 
         el.textContent =
-          `Protocol: ${info.protocol || "unknown"}
-TLS:      ${info.tls || "unknown"}
-Cipher:   ${info.cipher || "unknown"}
-Curve:    ${info.curve || "unknown"}`;
+          `Protocol:    ${info.protocol || "unknown"}
+TLS:         ${info.tls || "unknown"}
+Cipher:      ${info.cipher || "unknown"}
+Curve:       ${info.curve || "unknown"}
+Compression: ${compression}`;
       } catch (err) {
         el.textContent = "Connection details unavailable.";
       }
