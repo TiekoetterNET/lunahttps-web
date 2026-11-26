@@ -87,6 +87,11 @@ h2 {
   margin: 18px 0 0;
   color: var(--muted);
   font-size: 0.95rem;
+  text-wrap: balance;
+}
+
+.note code {
+  white-space: nowrap;
 }
 
 nav {
