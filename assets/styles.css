@@ -110,6 +110,7 @@ section {
 .facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
   border: 1px solid var(--line);
   background: var(--panel);
 }
@@ -143,6 +144,7 @@ dd {
   margin: 0;
   padding-left: 20px;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }
 
 code,

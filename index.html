@@ -5,8 +5,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
-    content="Luna-HTTP/S is a maintained custom NGINX build with OpenSSL LTS, ML-KEM support, HTTP/3, Brotli, GeoIP2, and reproducible Docker images.">
-  <title>Luna-HTTP/S - lunahttps.tiekoetter.net</title>
+    content="Luna-HTTP/S is a maintained custom NGINX build with the latest stable OpenSSL, HTTP/3, Encrypted ClientHello, post-quantum ML-KEM, Brotli, and Docker images.">
+  <title>Luna-HTTP/S: custom NGINX build with HTTP/3, ECH and ML-KEM</title>
+  <link rel="canonical" href="https://lunahttps.tiekoetter.net/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Luna-HTTP/S">
+  <meta property="og:title" content="Luna-HTTP/S: custom NGINX build with HTTP/3, ECH and ML-KEM">
+  <meta property="og:description"
+    content="A maintained custom NGINX build with the latest stable OpenSSL, HTTP/3, Encrypted ClientHello, post-quantum ML-KEM, Brotli, and Docker images.">
+  <meta property="og:url" content="https://lunahttps.tiekoetter.net/">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="assets/favicon.ico" sizes="any">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -17,9 +25,10 @@
       <p class="kicker">Custom NGINX build</p>
       <h1>Luna-HTTP/S</h1>
       <p class="summary">
-        A maintained, source-built NGINX mainline distribution with OpenSSL LTS,
-        post-quantum ML-KEM support, HTTP/3 / QUIC, Brotli, GeoIP2, header
-        manipulation support, and reproducible Docker builds.
+        A maintained, source-built NGINX mainline distribution with the latest
+        stable OpenSSL, post-quantum ML-KEM support, Encrypted ClientHello,
+        HTTP/3 / QUIC, Brotli, GeoIP2, header manipulation support, and
+        reproducible Docker builds.
       </p>
       <nav aria-label="Project links">
         <a href="https://github.com/tiekoetter/lunahttps">GitHub</a>
@@ -31,14 +40,14 @@
 
     <section aria-labelledby="overview-heading">
       <h2 id="overview-heading">Overview</h2>
-      <div class="facts">
+      <dl class="facts">
         <div>
           <dt>Base</dt>
           <dd>NGINX mainline</dd>
         </div>
         <div>
           <dt>TLS stack</dt>
-          <dd>OpenSSL 3.5 LTS</dd>
+          <dd>OpenSSL, latest stable</dd>
         </div>
         <div>
           <dt>Protocols</dt>
@@ -48,10 +57,10 @@
           <dt>Image</dt>
           <dd><code>ghcr.io/tiekoetter/lunahttps</code></dd>
         </div>
-      </div>
+      </dl>
       <p class="note">
         The build identifies itself as <code>luna-http/s</code> in generated
-        server headers and error pages.
+        server headers, error pages, and the output of <code>nginx -v</code>.
       </p>
       <h3>Live connection details</h3>
       <p>Running on <code>luna-http/s</code>:</p>
@@ -62,12 +71,18 @@
       <h2 id="features-heading">Included Features</h2>
       <ul class="feature-list">
         <li><strong>NGINX mainline</strong> as the base for current protocol and module support.</li>
-        <li><strong>OpenSSL LTS</strong> pinned by version and SHA256, including ML-KEM-capable post-quantum TLS
-          support.</li>
+        <li><strong>OpenSSL</strong>, following the latest stable release and pinned by version and SHA256, with
+          TLS 1.3, kTLS, and ML-KEM-capable post-quantum TLS support.</li>
+        <li><strong>Encrypted ClientHello (ECH)</strong> to hide the requested hostname in the TLS handshake, with a
+          helper script for setup and key rotation.</li>
         <li><strong>HTTP/3 / QUIC</strong> alongside HTTP/1.1 and HTTP/2.</li>
         <li><strong>Brotli compression</strong> through <code>ngx_brotli</code>.</li>
+        <li><strong>Real client IP handling</strong> behind trusted proxies through
+          <code>ngx_http_realip_module</code>.</li>
         <li><strong>GeoIP2 support</strong> through <code>ngx_http_geoip2_module</code>.</li>
         <li><strong>Header manipulation</strong> through <code>headers-more-nginx-module</code>.</li>
+        <li><strong>Response body substitution</strong> through
+          <code>ngx_http_substitutions_filter_module</code>.</li>
       </ul>
     </section>
 
@@ -84,6 +99,11 @@ docker run --rm \
   -p 443:443/tcp \
   -p 443:443/udp \
   ghcr.io/tiekoetter/lunahttps:latest</code></pre>
+      <p class="note">
+        Published images carry a signed build provenance attestation, which
+        can be checked with the GitHub CLI:
+      </p>
+      <pre><code>gh attestation verify oci://ghcr.io/tiekoetter/lunahttps:latest --repo tiekoetter/lunahttps</code></pre>
     </section>
 
     <section id="build" aria-labelledby="build-heading">
@@ -114,6 +134,12 @@ sudo ./build.sh</code></pre>
   <script>
     (async () => {
       const el = document.getElementById("connection-details");
+      const echLabels = {
+        SUCCESS: "active",
+        GREASE: "not used (client sent GREASE)",
+        NOT_TRIED: "not used",
+        FAILED: "failed"
+      };
 
       try {
         const res = await fetch("/connection-details.json", {
@@ -132,6 +158,7 @@ sudo ./build.sh</code></pre>
 TLS:         ${info.tls || "unknown"}
 Cipher:      ${info.cipher || "unknown"}
 Curve:       ${info.curve || "unknown"}
+ECH:         ${echLabels[info.ech] || info.ech || "unknown"}
 Compression: ${compression}`;
       } catch (err) {
         el.textContent = "Connection details unavailable.";
